@@ -1,5 +1,3 @@
-use core::fmt;
-
 pub enum Kind {
     String,
     Array,

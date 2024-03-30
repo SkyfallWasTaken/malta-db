@@ -1,7 +1,11 @@
+use core::fmt;
+
 mod array;
 mod simple_string;
 
 mod kind;
+
+trait Resp: fmt::Display {}
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error<'a> {

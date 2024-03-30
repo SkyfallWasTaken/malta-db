@@ -1,8 +1,9 @@
+use core::fmt;
+
 use aho_corasick::AhoCorasick;
 use once_cell::sync::Lazy;
-use std::fmt;
 
-use super::{kind::Kind, Error};
+use super::{kind::Kind, Error, Resp};
 
 const BANNED_PATTERNS: [&str; 2] = ["\r", "\n"];
 
@@ -24,6 +25,8 @@ static BANNED_PATTERN_MATCHER: Lazy<AhoCorasick> =
 pub struct SimpleString {
     value: String,
 }
+
+impl Resp for SimpleString {}
 
 impl SimpleString {
     /// Attempts to create a new simple string.
