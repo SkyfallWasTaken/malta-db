@@ -2,15 +2,7 @@ use core::fmt;
 
 use super::{kind::Kind, Resp};
 
-pub struct Array<T: Resp> {
-    pub vec: Vec<T>,
-}
-
-impl<T: Resp> Array<T> {
-    pub fn new() -> Self {
-        Self { vec: Vec::new() }
-    }
-}
+pub struct Array<T: Resp>(Vec<T>);
 
 impl<T: Resp> fmt::Display for Array<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -18,9 +10,9 @@ impl<T: Resp> fmt::Display for Array<T> {
             f,
             "{kind}{length}\r\n{values}",
             kind = Kind::Array.as_str(),
-            length = self.vec.len(),
+            length = self.0.len(),
             values = self
-                .vec
+                .0
                 .iter()
                 .map(|v| v.to_string())
                 .collect::<Vec<String>>()
@@ -36,12 +28,10 @@ mod tests {
 
     #[test]
     fn test_array() {
-        let array = Array {
-            vec: vec![
-                SimpleString::try_new("Hello, World!".to_string()).unwrap(),
-                SimpleString::try_new("Goodbye, World!".to_string()).unwrap(),
-            ],
-        };
+        let array = Array(vec![
+            SimpleString::try_new("Hello, World!".to_string()).unwrap(),
+            SimpleString::try_new("Goodbye, World!".to_string()).unwrap(),
+        ]);
 
         assert_eq!(
             array.to_string(),
