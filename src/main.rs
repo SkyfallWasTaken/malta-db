@@ -1,8 +1,10 @@
 use color_eyre::{eyre::Context, Result};
-use tracing::{info, Level};
+use tracing::{debug, error, info, Level};
 use tracing_subscriber::FmtSubscriber;
 
 use std::net::TcpListener;
+
+const ADDR: &str = "127.0.0.1:6379";
 
 fn main() -> Result<()> {
     let subscriber = FmtSubscriber::builder()
@@ -12,7 +14,8 @@ fn main() -> Result<()> {
     tracing::subscriber::set_global_default(subscriber)
         .wrap_err("setting default subscriber failed")?;
 
-    let listener = TcpListener::bind("127.0.0.1:6379")?;
+    let listener = TcpListener::bind(ADDR)?;
+    info!("Started listening on {ADDR}");
 
     for stream in listener.incoming() {
         match stream {
