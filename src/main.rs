@@ -6,6 +6,9 @@ use std::io::{Read, Write};
 use std::net::{TcpListener, TcpStream};
 use std::thread;
 
+mod resp;
+use resp::SimpleString;
+
 const ADDR: &str = "127.0.0.1:6379";
 
 fn main() -> Result<()> {
@@ -36,6 +39,7 @@ fn main() -> Result<()> {
 
 fn handle_client(mut stream: TcpStream) -> Result<()> {
     let mut buf = [0; 512];
+    let simple_string = SimpleString::try_new("PONG".to_string())?;
 
     loop {
         let bytes_read = stream.read(&mut buf)?;
@@ -46,6 +50,6 @@ fn handle_client(mut stream: TcpStream) -> Result<()> {
         let s = std::str::from_utf8(&buf[..bytes_read])?;
         info!("{s}");
 
-        stream.write_all(b"+PONG\r\n")?;
+        stream.write_all(&simple_string.as_bytes())?;
     }
 }
