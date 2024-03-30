@@ -2,7 +2,8 @@ use color_eyre::{eyre::Context, Result};
 use tracing::{debug, error, info, Level};
 use tracing_subscriber::FmtSubscriber;
 
-use std::net::TcpListener;
+use std::io::{Read, Write};
+use std::net::{TcpListener, TcpStream};
 
 const ADDR: &str = "127.0.0.1:6379";
 
@@ -19,8 +20,9 @@ fn main() -> Result<()> {
 
     for stream in listener.incoming() {
         match stream {
-            Ok(_stream) => {
+            Ok(stream) => {
                 debug!("accepted new connection");
+                handle_client(stream)?
             }
             Err(e) => {
                 error!("{e}");
@@ -29,4 +31,20 @@ fn main() -> Result<()> {
     }
 
     Ok(())
+}
+
+fn handle_client(mut stream: TcpStream) -> Result<()> {
+    let mut buf = [0; 512];
+
+    loop {
+        let bytes_read = stream.read(&mut buf)?;
+        if bytes_read == 0 {
+            return Ok(());
+        }
+
+        let s = std::str::from_utf8(&buf[..bytes_read])?;
+        info!("{s}");
+
+        stream.write_all(b"+PONG\r\n")?;
+    }
 }
