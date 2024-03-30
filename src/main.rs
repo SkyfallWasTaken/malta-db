@@ -4,6 +4,7 @@ use tracing_subscriber::FmtSubscriber;
 
 use std::io::{Read, Write};
 use std::net::{TcpListener, TcpStream};
+use std::thread;
 
 const ADDR: &str = "127.0.0.1:6379";
 
@@ -22,7 +23,7 @@ fn main() -> Result<()> {
         match stream {
             Ok(stream) => {
                 debug!("accepted new connection");
-                handle_client(stream)?
+                thread::spawn(|| handle_client(stream).unwrap());
             }
             Err(e) => {
                 error!("{e}");
