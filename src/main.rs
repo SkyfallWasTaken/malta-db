@@ -50,6 +50,6 @@ fn handle_client(mut stream: TcpStream) -> Result<()> {
         let s = std::str::from_utf8(&buf[..bytes_read])?;
         info!("{s}");
 
-        stream.write_all(&simple_string.as_bytes())?;
+        stream.write_all(&simple_string.to_string().as_bytes())?;
     }
 }

@@ -1,6 +1,7 @@
 use core::fmt;
 
 mod array;
+mod bulk_string;
 mod simple_string;
 
 mod kind;
@@ -13,4 +14,14 @@ pub enum Error<'a> {
     BannedPatterns(&'a str),
 }
 
+pub use bulk_string::BulkString;
 pub use simple_string::SimpleString;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::resp::{Array, BulkString};
+
+    #[test]
+    fn test_command() {}
+}

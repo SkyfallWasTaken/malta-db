@@ -38,4 +38,11 @@ mod tests {
             "*2\r\n+Hello, World!\r\n+Goodbye, World!\r\n"
         );
     }
+
+    #[test]
+    fn test_empty_array() {
+        let array = Array::<SimpleString>(vec![]);
+
+        assert_eq!(array.to_string(), "*0\r\n");
+    }
 }

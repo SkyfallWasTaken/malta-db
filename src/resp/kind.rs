@@ -1,12 +1,14 @@
 pub enum Kind {
-    String,
+    SimpleString,
+    BulkString,
     Array,
 }
 
 impl Kind {
     pub fn as_str(&self) -> &str {
         match self {
-            Kind::String => "+",
+            Kind::SimpleString => "+",
+            Kind::BulkString => "$",
             Kind::Array => "*",
         }
     }

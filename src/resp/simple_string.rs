@@ -68,10 +68,6 @@ impl SimpleString {
             None => Ok(()),
         }
     }
-
-    pub fn as_bytes(&self) -> Vec<u8> {
-        self.to_string().into_bytes()
-    }
 }
 
 impl fmt::Display for SimpleString {
@@ -79,7 +75,7 @@ impl fmt::Display for SimpleString {
         write!(
             f,
             "{kind}{value}\r\n",
-            kind = Kind::String.as_str(),
+            kind = Kind::SimpleString.as_str(),
             value = self.value
         )
     }
