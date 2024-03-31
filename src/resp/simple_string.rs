@@ -84,7 +84,7 @@ impl FromStr for SimpleString {
     type Err = Error<'static>;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Ok(Self::try_new(s.to_string())?)
+        Self::try_new(s.to_string())
     }
 }
 
@@ -92,7 +92,7 @@ impl TryFrom<&str> for SimpleString {
     type Error = Error<'static>;
 
     fn try_from(s: &str) -> Result<Self, Self::Error> {
-        Ok(Self::try_new(s.to_string())?)
+        Self::try_new(s.to_string())
     }
 }
 
@@ -100,7 +100,7 @@ impl TryFrom<String> for SimpleString {
     type Error = Error<'static>;
 
     fn try_from(s: String) -> Result<Self, Self::Error> {
-        Ok(Self::try_new(s)?)
+        Self::try_new(s)
     }
 }
 
