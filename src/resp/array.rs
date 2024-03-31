@@ -2,7 +2,7 @@ use core::fmt;
 
 use super::{kind::Kind, Resp};
 
-pub struct Array<T: Resp>(Vec<T>);
+pub struct Array<T: Resp>(pub Vec<T>);
 
 impl<T: Resp> fmt::Display for Array<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
