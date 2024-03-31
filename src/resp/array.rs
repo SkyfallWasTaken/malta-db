@@ -11,12 +11,7 @@ impl<T: Resp> fmt::Display for Array<T> {
             "{kind}{length}\r\n{values}",
             kind = Kind::Array.as_str(),
             length = self.0.len(),
-            values = self
-                .0
-                .iter()
-                .map(|v| v.to_string())
-                .collect::<Vec<String>>()
-                .join("")
+            values = self.0.iter().map(ToString::to_string).collect::<String>()
         )
     }
 }

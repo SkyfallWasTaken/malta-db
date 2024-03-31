@@ -3,17 +3,10 @@ use std::str::FromStr;
 
 use super::{kind::Kind, Error, Resp};
 
-pub struct BulkString(String);
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct BulkString(pub String);
 
 impl Resp for BulkString {}
-
-impl FromStr for BulkString {
-    type Err = Error<'static>;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Ok(BulkString(s.to_string()))
-    }
-}
 
 impl fmt::Display for BulkString {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
@@ -28,10 +21,28 @@ impl fmt::Display for BulkString {
     }
 }
 
+impl FromStr for BulkString {
+    type Err = Error<'static>;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(Self(s.to_string()))
+    }
+}
+
+impl From<&str> for BulkString {
+    fn from(s: &str) -> Self {
+        Self(s.to_string())
+    }
+}
+
+impl From<String> for BulkString {
+    fn from(s: String) -> Self {
+        Self(s)
+    }
+}
+
 #[cfg(test)]
 mod test {
-    use crate::resp::bulk_string;
-
     use super::*;
 
     #[test]

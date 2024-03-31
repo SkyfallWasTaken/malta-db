@@ -1,4 +1,5 @@
 use core::fmt;
+use core::str::FromStr;
 
 use aho_corasick::AhoCorasick;
 use once_cell::sync::Lazy;
@@ -22,9 +23,7 @@ static BANNED_PATTERN_MATCHER: Lazy<AhoCorasick> =
 /// ```
 ///
 /// To send binary strings, use bulk strings instead.
-pub struct SimpleString {
-    value: String,
-}
+pub struct SimpleString(String);
 
 impl Resp for SimpleString {}
 
@@ -45,7 +44,7 @@ impl SimpleString {
 
     pub fn try_new<'a>(value: String) -> Result<Self, Error<'a>> {
         Self::is_valid(&value)?;
-        Ok(Self { value })
+        Ok(Self(value))
     }
 
     /// Gets the value of the simple string, as a reference.
@@ -57,13 +56,13 @@ impl SimpleString {
     /// let simple_string = SimpleString::try_new("Hello, World!".to_string()).unwrap();
     /// println!("{}", simple_string.value()); // "Hello, World!"
     /// ```
-    pub fn value(&self) -> &String {
-        &self.value
+    pub const fn value(&self) -> &String {
+        &self.0
     }
 
     /// Checks if the value is valid.
     pub fn is_valid<'a>(value: &String) -> Result<(), Error<'a>> {
-        match (*BANNED_PATTERN_MATCHER).find(&value) {
+        match (*BANNED_PATTERN_MATCHER).find(value) {
             Some(r#match) => Err(Error::BannedPatterns(BANNED_PATTERNS[r#match.pattern()])),
             None => Ok(()),
         }
@@ -76,8 +75,32 @@ impl fmt::Display for SimpleString {
             f,
             "{kind}{value}\r\n",
             kind = Kind::SimpleString.as_str(),
-            value = self.value
+            value = self.0
         )
+    }
+}
+
+impl FromStr for SimpleString {
+    type Err = Error<'static>;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(Self::try_new(s.to_string())?)
+    }
+}
+
+impl TryFrom<&str> for SimpleString {
+    type Error = Error<'static>;
+
+    fn try_from(s: &str) -> Result<Self, Self::Error> {
+        Ok(Self::try_new(s.to_string())?)
+    }
+}
+
+impl TryFrom<String> for SimpleString {
+    type Error = Error<'static>;
+
+    fn try_from(s: String) -> Result<Self, Self::Error> {
+        Ok(Self::try_new(s)?)
     }
 }
 

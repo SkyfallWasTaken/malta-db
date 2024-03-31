@@ -6,6 +6,8 @@ mod simple_string;
 
 mod kind;
 
+mod command;
+
 /// Marker trait for RESP types.
 pub trait Resp: fmt::Display {}
 

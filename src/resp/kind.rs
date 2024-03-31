@@ -5,11 +5,11 @@ pub enum Kind {
 }
 
 impl Kind {
-    pub fn as_str(&self) -> &str {
+    pub const fn as_str(&self) -> &str {
         match self {
-            Kind::SimpleString => "+",
-            Kind::BulkString => "$",
-            Kind::Array => "*",
+            Self::SimpleString => "+",
+            Self::BulkString => "$",
+            Self::Array => "*",
         }
     }
 }
