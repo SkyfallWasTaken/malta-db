@@ -22,12 +22,11 @@ jobs:
 
   clippy:
     runs-on: ubuntu-latest
-    name: Run Clippy
     steps:
       - uses: actions/checkout@v3
-      - uses: qernal/github-actions-rust-clippy@v2.0.2
-        with:
-          rust_version: 1.77.1
+      - uses: Swatinem/rust-cache@v2
+      - name: RunClippy
+        run: cargo clippy --all-targets --all-features -- -D warnings
 
   fmt:
     runs-on: ubuntu-latest
